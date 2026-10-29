@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- # [EDIT] JUDUL TAB BROWSER -->
+    <title>Portofolio - M.QOVAL</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        // # [EDIT] KONFIGURASI WARNA MONOKROM TAILWIND (Bisa sesuaikan kode hex warna)
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        mono: {
+                            50: '#f9f9f9',   // # [EDIT] Warna sangat terang
+                            100: '#f0f0f0',  // # [EDIT] Warna terang utama
+                            200: '#e1e1e1',
+                            300: '#cdcdcd',
+                            400: '#b0b0b0',  // # [EDIT] Teks sekunder
+                            500: '#888888',
+                            600: '#6d6d6d',
+                            700: '#4d4d4d',
+                            800: '#2b2b2b',  // # [EDIT] Border & latar gelap
+                            900: '#121212',  // # [EDIT] Latar komponen
+                            950: '#080808',  // # [EDIT] Latar belakang utama
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* # [EDIT] STYLE SCROLLBAR SISI KANAN */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121212; /* # [EDIT] Warna track scrollbar */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333333; /* # [EDIT] Warna batang scrollbar */
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555555;
+        }
+        
+        /* # [EDIT] ANIMASI BACKGROUND BERGERAK (MOVING GRID) */
+        @keyframes animatedBackground {
+            0% {
+                background-position: 0 0, 0 0;
+            }
+            50% {
+                background-position: 40px 40px, -20px -20px;
+            }
+            100% {
+                background-position: 80px 80px, 0 0;
+            }
+        }
+
+        .animated-bg {
+            background-size: 40px 40px, 80px 80px; /* # [EDIT] Ukuran kotak grid */
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+            animation: animatedBackground 10s linear infinite alternate; /* # [EDIT] Durasi animasi background (10s) */
+        }
+
+        /* # [EDIT] KELAS UNTUK MENYEMBUNYIKAN HEADER SAAT SCROLL KE BAWAH */
+        .nav-hidden {
+            transform: translateY(-100%);
+        }
+
+        /* # [EDIT] EFEK SCROLL ANIMASI (MEMUDAR / FADE OUT & FADE IN SAAT SCROLL) */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px) scale(0.98); /* # [EDIT] Jarak geser elemen saat tersembunyi */
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); /* # [EDIT] Kecepatan transisi animasi (0.7s) */
+            will-change: opacity, transform;
+        }
+
+        .scroll-animate.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    </style>
+</head>
+<body class="bg-mono-950 text-mono-100 font-sans antialiased selection:bg-mono-100 selection:text-mono-950 min-h-screen flex flex-col animated-bg relative">
+
+    <!-- ========================================== -->
+    <!-- # [EDIT] HEADER & NAVIGASI UDAH FIXED/STICKY -->
+    <!-- ========================================== -->
+    <header id="main-header" class="fixed top-0 left-0 z-50 w-full backdrop-blur-md bg-mono-950/90 border-b border-mono-800 transition-transform duration-300 ease-in-out">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            
+            <!-- # [EDIT] LOGO / BRAND NAMA -->
+            <a href="#" class="font-mono text-lg tracking-wider font-bold text-mono-50 flex items-center space-x-2 group">
+                <span class="w-3 h-3 bg-mono-50 inline-block transition-transform group-hover:rotate-45"></span>
+                <span>PORTFOLIO<span class="text-mono-500">.</span></span> <!-- # [EDIT] Teks Logo -->
+            </a>
+
+            <!-- # [EDIT] MENU NAVIGASI DESKTOP -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                <a href="#about" class="text-mono-400 hover:text-mono-50 transition-colors">About Me</a>
+                <a href="#skills" class="text-mono-400 hover:text-mono-50 transition-colors">What I Can Do</a>
+                <a href="#achievements" class="text-mono-400 hover:text-mono-50 transition-colors">Achievement</a>
+                <a href="#contact" class="text-mono-400 hover:text-mono-50 transition-colors">Contact</a>
+            </nav>
+
+            <!-- # [EDIT] TOMBOL GET IN TOUCH (HEADER) -->
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="#contact" class="px-4 py-2 text-xs font-mono tracking-wider border border-mono-100 text-mono-100 hover:bg-mono-100 hover:text-mono-950 transition-all duration-200 rounded">
+                    GET IN TOUCH <!-- # [EDIT] Label Tombol Header -->
+                </a>
+            </div>
+
+            <!-- Tombol Menu Mobile -->
+            <button id="mobile-menu-btn" aria-label="Toggle Navigation" class="md:hidden p-2 text-mono-400 hover:text-mono-50 focus:outline-none">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- # [EDIT] MENU NAVIGASI MOBILE (TAMPIL DI HP) -->
+        <div id="mobile-menu" class="hidden md:hidden border-b border-mono-800 bg-mono-900/95 backdrop-blur-lg px-4 pt-2 pb-6 space-y-3">
+            <a href="#about" class="mobile-nav-link block py-2 text-mono-300 hover:text-mono-50 font-medium">About Me</a>
+            <a href="#skills" class="mobile-nav-link block py-2 text-mono-300 hover:text-mono-50 font-medium">What I Can Do</a>
+            <a href="#achievements" class="mobile-nav-link block py-2 text-mono-300 hover:text-mono-50 font-medium">Achievement</a>
+            <a href="#contact" class="mobile-nav-link block py-2 text-mono-300 hover:text-mono-50 font-medium">Contact</a>
+            <a href="#contact" class="mobile-nav-link inline-block mt-2 w-full text-center px-4 py-2 text-xs font-mono border border-mono-100 text-mono-100 hover:bg-mono-100 hover:text-mono-950 transition-all rounded">
+                GET IN TOUCH
+            </a>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-24 mt-20">
+
+        <!-- ========================================== -->
+        <!-- # [EDIT] HERO / HERO INTRO SECTION         -->
+        <!-- ========================================== -->
+        <section class="pt-8 md:pt-16 pb-6 flex flex-col md:flex-row items-center justify-between gap-10 scroll-animate">
+            <div class="flex-1 space-y-6">
+                
+            
+                
+                <!-- # [EDIT] NAMA UTAMA & JUDUL PROFIL -->
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-mono-50 leading-tight">
+                    MUHAMMAD <br class="hidden sm:inline"/>
+                    <span class="underline underline-offset-8 decoration-mono-700 decoration-2">QOVAL AL CHANAFI</span> <!-- # [EDIT] Ubah Nama Anda -->
+                </h1>
+                
+                <!-- # [EDIT] SUBDESKRIPSI SIKAP / PROFESI -->
+                <p class="text-mono-400 text-base sm:text-lg max-w-xl leading-relaxed">
+                    Mahasiswa Sistem Informasi yang siap untuk mendapatkan ilmu dan pengalaman baru. <!-- # [EDIT] Deskripsi Singkat Hero -->
+                </p>
+
+                <!-- # [EDIT] TOMBOL AKSI UTAMA -->
+                <div class="pt-2 flex flex-wrap gap-4 font-mono text-sm">
+                    <a href="#about" class="px-6 py-3 bg-mono-100 text-mono-950 hover:bg-mono-300 font-semibold transition-all rounded flex items-center space-x-2">
+                        <span>Lihat Profil</span>
+                        <i data-lucide="arrow-down-right" class="w-4 h-4"></i>
+                    </a>
+                    <a href="#contact" class="px-6 py-3 border border-mono-700 hover:border-mono-400 text-mono-300 transition-all rounded flex items-center space-x-2">
+                        <span>Kontak Saya</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- # [EDIT] KARTU IDENTITAS RINGKAS / FOTO PROFIL -->
+            <div class="w-full md:w-80 flex-shrink-0">
+                <div class="relative group p-6 bg-mono-900/80 border border-mono-800 rounded-lg shadow-xl backdrop-blur-sm transition-all duration-300 hover:border-mono-600">
+                    
+                    <!-- Box Foto Profil dari Link Google Drive -->
+                    <div class="w-full h-72 bg-mono-950 rounded overflow-hidden relative mb-5 flex items-center justify-center border border-mono-700 group-hover:border-mono-500 transition-colors">
+                        <!-- # [EDIT] FOTO PROFIL (Menggunakan Direct Link Google Drive) -->
+                        <img 
+                            src="https://lh3.googleusercontent.com/d/1bUEU5N14BDekjDtFu-AwncHMe2FSPcTi" 
+                            alt="Foto Profil Muhammad Qoval" 
+                            
+                        />
+                    </div>
+                    
+                    <!-- # [EDIT] DATA IDENTITAS SINGKAT -->
+                    <div class="space-y-2 font-mono text-xs">
+                        <div class="flex justify-between border-b border-mono-800 pb-2">
+                            <span class="text-mono-500">NAMA</span>
+                            <span class="text-mono-200 font-semibold">Muhammad Qoval Al Chanafi</span> <!-- # [EDIT] Nama Anda -->
+                        </div>
+                        <div class="flex justify-between border-b border-mono-800 pb-2">
+                            <span class="text-mono-500">NIM</span>
+                            <span class="text-mono-200 font-semibold">26051214102</span> <!-- # [EDIT] NIM Anda -->
+                        </div>
+                        <div class="flex justify-between border-b border-mono-800 pb-2">
+                            <span class="text-mono-500">PRODI</span>
+                            <span class="text-mono-200 font-semibold">Sistem Informasi</span> <!-- # [EDIT] Program Studi -->
+                        </div>
+                        <div class="flex justify-between pt-1">
+                            <span class="text-mono-500">STATUS</span>
+                            <span class="text-mono-200">Aktif </span> <!-- # [EDIT] Status / Semester -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- # [EDIT] BAGIAN 01: ABOUT ME               -->
+        <!-- ========================================== -->
+        <section id="about" class="scroll-mt-28 space-y-12 scroll-animate">
+            <div class="border-b border-mono-800 pb-4 flex items-end justify-between">
+                <div>
+                    <span class="text-xs font-mono text-mono-500 uppercase tracking-widest block mb-1">BAGIAN 01</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-mono-50">About Me</h2>
+                </div>
+                <i data-lucide="user-check" class="text-mono-600 w-6 h-6"></i>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="md:col-span-2 space-y-6">
+                    <h3 class="text-xl font-semibold text-mono-100">Profil Singkat</h3>
+                    
+                    <!-- # [EDIT] DESKRIPSI SINGKAT TENTANG DIRI ANDA -->
+                    <p class="text-mono-400 leading-relaxed text-sm sm:text-base">
+                        Saya adalah mahasiswa Sistem Informasi di Universitas Negeri Surabaya (UNESA) yang berfokus pada pengembangan perangkat lunak dan arsitektur sistem. Memiliki fondasi kuat dalam pemrograman, manajemen basis data, serta analisis kebutuhan sistem untuk menghasilkan aplikasi yang responsif dan efisien. <!-- # [EDIT] Teks Profil Singkat -->
+                    </p>
+
+
+                    <!-- # [EDIT] AKTIVITAS SAAT INI -->
+                    <div class="pt-4 space-y-3">
+                        <h4 class="text-sm font-mono text-mono-400 uppercase tracking-wider">Aktivitas Saat Ini</h4>
+                        <div class="p-4 bg-mono-900/40 border border-mono-800/80 rounded space-y-2">
+                            <div class="flex items-start space-x-3">
+                                <i data-lucide="activity" class="w-5 h-5 text-mono-400 mt-0.5 flex-shrink-0"></i>
+                                <div>
+                                    <p class="text-sm text-mono-200 font-medium">Mahasiswa yang aktif </p> <!-- # [EDIT] Judul Aktivitas -->
+                                    <p class="text-xs text-mono-500 mt-0.5">berusaha memahami hal yang baru.</p> <!-- # [EDIT] Detail Aktivitas -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- # [EDIT] RIWAYAT PENDIDIKAN -->
+                <div class="space-y-6">
+                    <h3 class="text-xl font-semibold text-mono-100">Pendidikan</h3>
+                    <div class="space-y-4">
+                        
+                        <!-- Pendidikan 1 -->
+                        <div class="p-4 bg-mono-900/60 border border-mono-800 rounded relative pl-6 before:absolute before:left-2 before:top-4 before:bottom-4 before:w-0.5 before:bg-mono-700">
+                            <span class="text-xs font-mono text-mono-500">2026 - Sekarang</span> <!-- # [EDIT] Tahun Pendidikan -->
+                            <h4 class="text-sm font-semibold text-mono-100 mt-1">S1 Sistem Informasi</h4> <!-- # [EDIT] Gelar / Jurusan -->
+                            <p class="text-xs text-mono-400">Universitas Negeri Surabaya</p> <!-- # [EDIT] Nama Kampus/Sekolah -->
+                        </div>
+                        
+                        <!-- Pendidikan 2 -->
+                        <div class="p-4 bg-mono-900/60 border border-mono-800 rounded relative pl-6 before:absolute before:left-2 before:top-4 before:bottom-4 before:w-0.5 before:bg-mono-800">
+                            <span class="text-xs font-mono text-mono-500">2023 - 2026</span> <!-- # [EDIT] Tahun Pendidikan -->
+                            <h4 class="text-sm font-semibold text-mono-100 mt-1">MAN 4 Jombang</h4> <!-- # [EDIT] Sekolah -->
+                            <p class="text-xs text-mono-500 mt-2">Aktif dalam ekstrakurikuler jurnaristik.</p> <!-- # [EDIT] Catatan Singkat -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- # [EDIT] BAGIAN 02: WHAT I CAN DO (SKILLS) -->
+        <!-- ========================================== -->
+        <section id="skills" class="scroll-mt-28 space-y-8 scroll-animate">
+            <div class="border-b border-mono-800 pb-4 flex items-end justify-between">
+                <div>
+                    <span class="text-xs font-mono text-mono-500 uppercase tracking-widest block mb-1">BAGIAN 02</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-mono-50">What I Can Do</h2>
+                </div>
+                <i data-lucide="code-2" class="text-mono-600 w-6 h-6"></i>
+            </div>
+
+            <!-- Tombol Filter Kategori Skill -->
+            <div class="flex flex-wrap gap-2 pb-2" id="skill-filter-buttons">
+                <button data-filter="all" class="skill-btn active-skill-btn px-4 py-1.5 rounded text-xs font-mono border border-mono-100 bg-mono-100 text-mono-950 transition-all">Semua</button>
+                <button data-filter="lang" class="skill-btn px-4 py-1.5 rounded text-xs font-mono border border-mono-800 text-mono-400 hover:text-mono-100 hover:border-mono-600 transition-all">Bahasa Pemrograman</button>
+                <button data-filter="framework" class="skill-btn px-4 py-1.5 rounded text-xs font-mono border border-mono-800 text-mono-400 hover:text-mono-100 hover:border-mono-600 transition-all">Framework & Lib</button>
+                <button data-filter="tool" class="skill-btn px-4 py-1.5 rounded text-xs font-mono border border-mono-800 text-mono-400 hover:text-mono-100 hover:border-mono-600 transition-all">Tools & Utility</button>
+            </div>
+
+            <!-- # [EDIT] DAFTAR KARTU SKILL / KEMAMPUAN -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="skills-grid">
+                
+                <!-- Skill Item 1 -->
+                <div class="skill-card p-5 bg-mono-900/50 border border-mono-800 rounded hover:border-mono-600 transition-all group" data-category="framework">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="p-2 bg-mono-800 rounded group-hover:bg-mono-700 transition-colors">
+                            <i data-lucide="bone" class="w-5 h-5 text-mono-200"></i>
+                        </div>
+                        <span class="text-[10px] font-mono px-2 py-0.5 border border-mono-700 text-mono-400 rounded">Animation</span>
+                    </div>
+                    <h3 class="text-base font-semibold text-mono-100">Moho Animation Studio</h3> <!-- # [EDIT] Nama Skill -->
+                    <p class="text-xs text-mono-400 mt-1">2D Rigging, Smart Bones, Interpolasi Keyframe, Frame-by-Frame, & Vector Layer Animation.</p> <!-- # [EDIT] Penjelasan Skill -->
+                </div>
+
+                <!-- Skill Item 3 -->
+                <div class="skill-card p-5 bg-mono-900/50 border border-mono-800 rounded hover:border-mono-600 transition-all group" data-category="framework">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="p-2 bg-mono-800 rounded group-hover:bg-mono-700 transition-colors">
+                            <i data-lucide="palette" class="w-5 h-5 text-mono-200"></i>
+                        </div>
+                        <span class="text-[10px] font-mono px-2 py-0.5 border border-mono-700 text-mono-400 rounded">Styling</span>
+                    </div>
+                    <h3 class="text-base font-semibold text-mono-100">menggambar</h3> <!-- # [EDIT] Nama Skill -->
+                    <p class="text-xs text-mono-400 mt-1">perspektif,komposisi,proporsi,arsir.</p> <!-- # [EDIT] Penjelasan Skill -->
+                </div>
+
+                <!-- Skill Item 4 -->
+                <div class="skill-card p-5 bg-mono-900/50 border border-mono-800 rounded hover:border-mono-600 transition-all group" data-category="lang">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="p-2 bg-mono-800 rounded group-hover:bg-mono-700 transition-colors">
+                            <i data-lucide="terminal" class="w-5 h-5 text-mono-200"></i>
+                        </div>
+                        <span class="text-[10px] font-mono px-2 py-0.5 border border-mono-700 text-mono-400 rounded">Bahasa</span>
+                    </div>
+                    <h3 class="text-base font-semibold text-mono-100">Python</h3> <!-- # [EDIT] Nama Skill -->
+                    <p class="text-xs text-mono-400 mt-1">Pemrograman dasar, dan masih belajar mendalami python.</p> <!-- # [EDIT] Penjelasan Skill -->
+                </div>
+
+                <!-- Skill Item 5 -->
+                <div class="skill-card p-5 bg-mono-900/50 border border-mono-800 rounded hover:border-mono-600 transition-all group" data-category="tool">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="p-2 bg-mono-800 rounded group-hover:bg-mono-700 transition-colors">
+                            <i data-lucide="git-branch" class="w-5 h-5 text-mono-200"></i>
+                        </div>
+                        <span class="text-[10px] font-mono px-2 py-0.5 border border-mono-700 text-mono-400 rounded">Tools</span>
+                    </div>
+                    <h3 class="text-base font-semibold text-mono-100">Git & GitHub</h3> <!-- # [EDIT] Nama Skill -->
+                    <p class="text-xs text-mono-400 mt-1">Kontrol versi, alur kerja branch, kolaborasi proyek open-source.</p> <!-- # [EDIT] Penjelasan Skill -->
+                </div>
+
+
+                <!-- # [EDIT] Skill Item 7 - Fotografi (BARU) -->
+                <div class="skill-card p-5 bg-mono-900/50 border border-mono-800 rounded hover:border-mono-600 transition-all group" data-category="tool">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="p-2 bg-mono-800 rounded group-hover:bg-mono-700 transition-colors">
+                            <i data-lucide="camera" class="w-5 h-5 text-mono-200"></i>
+                        </div>
+                        <span class="text-[10px] font-mono px-2 py-0.5 border border-mono-700 text-mono-400 rounded">Media</span>
+                    </div>
+                    <h3 class="text-base font-semibold text-mono-100">Fotografi</h3> <!-- # [EDIT] Nama Skill -->
+                    <p class="text-xs text-mono-400 mt-1">Komposisi visual, pencahayaan studio/outdoor, fotografi produk, dan portraiture.</p> <!-- # [EDIT] Penjelasan Skill -->
+                </div>
+
+                <!-- # [EDIT] Skill Item 8 - Videografi (BARU) -->
+                <div class="skill-card p-5 bg-mono-900/50 border border-mono-800 rounded hover:border-mono-600 transition-all group" data-category="tool">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="p-2 bg-mono-800 rounded group-hover:bg-mono-700 transition-colors">
+                            <i data-lucide="video" class="w-5 h-5 text-mono-200"></i>
+                        </div>
+                        <span class="text-[10px] font-mono px-2 py-0.5 border border-mono-700 text-mono-400 rounded">Media</span>
+                    </div>
+                    <h3 class="text-base font-semibold text-mono-100">Videografi</h3> <!-- # [EDIT] Nama Skill -->
+                    <p class="text-xs text-mono-400 mt-1">Pengambilan gambar sinematik, video editing, dan color grading.</p> <!-- # [EDIT] Penjelasan Skill -->
+                </div>
+
+            </div>
+        </section>
+           <!-- ========================================== -->
+        <!-- # [EDIT] BAGIAN 03: ACHIEVEMENT            -->
+        <!-- ========================================== -->
+        <section id="achievements" class="scroll-mt-28 space-y-8 scroll-animate">
+            <div class="border-b border-mono-800 pb-4 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                <div>
+                    <span class="text-xs font-mono text-mono-500 uppercase tracking-widest block mb-1">BAGIAN 03</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-mono-50">Achievement</h2>
+                </div>
+                
+                <!-- Tombol Toggle Form Upload Achievement -->
+                <button id="toggle-achievement-form-btn" onclick="toggleAchievementForm()" class="px-4 py-2 text-xs font-mono border border-mono-100 bg-mono-100 text-mono-950 font-semibold rounded hover:bg-mono-300 transition-all flex items-center space-x-2 self-start sm:self-auto">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Tambah Achievement</span>
+                </button>
+            </div>
+
+            <!-- FORMULIR INPUT / UPLOAD ACHIEVEMENT BARU (Dapat dibuka/ditutup) -->
+            <div id="achievement-form-container" class="hidden p-6 bg-mono-900/80 border border-mono-700 rounded-lg space-y-4 transition-all">
+                <div class="flex justify-between items-center border-b border-mono-800 pb-3">
+                    <h3 class="text-sm font-mono font-bold text-mono-100 uppercase tracking-wider flex items-center gap-2">
+                        <i data-lucide="upload" class="w-4 h-4 text-mono-400"></i>
+                        <span>Upload / Input Pencapaian Baru</span>
+                    </h3>
+                    <button onclick="toggleAchievementForm()" class="text-mono-500 hover:text-mono-200">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <form id="add-achievement-form" onsubmit="handleAddAchievement(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-mono text-mono-400 uppercase mb-1">Nama Pencapaian / Lomba</label>
+                            <input type="text" id="ach-title" required placeholder="Contoh: Juara 1 Lomba Animasi 2D" class="w-full bg-mono-950 border border-mono-800 rounded px-3 py-2 text-xs text-mono-100 focus:outline-none focus:border-mono-400">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-mono text-mono-400 uppercase mb-1">Tahun</label>
+                            <input type="text" id="ach-year" required placeholder="Contoh: 2026" class="w-full bg-mono-950 border border-mono-800 rounded px-3 py-2 text-xs text-mono-100 focus:outline-none focus:border-mono-400">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-mono text-mono-400 uppercase mb-1">Penyelenggara / Lembaga</label>
+                            <input type="text" id="ach-org" required placeholder="Contoh: Kemendikbud" class="w-full bg-mono-950 border border-mono-800 rounded px-3 py-2 text-xs text-mono-100 focus:outline-none focus:border-mono-400">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-mono text-mono-400 uppercase mb-1">Unggah Bukti / Sertifikat (Opsional)</label>
+                            <input type="file" id="ach-file" accept="image/*,.pdf" class="w-full bg-mono-950 border border-mono-800 rounded px-3 py-1.5 text-xs text-mono-400 focus:outline-none file:mr-3 file:py-1 file:px-2 file:rounded file:border-0 file:text-[10px] file:font-mono file:bg-mono-800 file:text-mono-200">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-mono text-mono-400 uppercase mb-1">Deskripsi Singkat</label>
+                        <textarea id="ach-desc" rows="2" required placeholder="Jelaskan peran, jumlah peserta, atau pencapaian Anda..." class="w-full bg-mono-950 border border-mono-800 rounded px-3 py-2 text-xs text-mono-100 focus:outline-none focus:border-mono-400 resize-none"></textarea>
+                    </div>
+
+                    <div class="flex justify-end space-x-3 pt-2">
+                        <button type="button" onclick="toggleAchievementForm()" class="px-4 py-2 border border-mono-800 text-mono-400 text-xs font-mono rounded hover:text-mono-100">Batal</button>
+                        <button type="submit" class="px-4 py-2 bg-mono-100 text-mono-950 text-xs font-mono font-bold rounded hover:bg-mono-300">Simpan Achievement</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- GRID DAFTAR ACHIEVEMENT -->
+            <div id="achievements-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Achievement 1 -->
+                <div class="p-6 bg-mono-900/50 border border-mono-800 rounded-lg hover:border-mono-600 transition-all flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono px-2 py-0.5 bg-mono-800 text-mono-300 border border-mono-700 rounded">2026</span>
+                            <i data-lucide="award" class="w-5 h-5 text-mono-400"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-mono-100">lulusan terbaik ke-8 tugas akhri prodistik</h3>
+                        <p class="text-xs font-mono text-mono-500">Penyelenggara: Man 4 Jombang & ITS</p>
+                        <p class="text-xs text-mono-400 leading-relaxed">
+                            Meraih nilai cumlaude dengan karya akhir animasi 2D berbasis Moho Pro dengan kompleksitas Smart Bones kustom.
+                        </p>
+                    </div>
+                    <button onclick="openModal('Juara 1 Lomba Animasi 2D & Moho Rigging', '2026', 'Festikraf Indonesia', 'Sertifikat kejuaraan nasional dan dokumentasi pengujian karya animasi.')" class="w-full py-2 border border-mono-700 text-mono-200 text-xs font-mono rounded hover:bg-mono-100 hover:text-mono-950 transition-all text-center">
+                        Lihat Bukti
+                    </button>
+                </div>
+
+                <!-- Achievement 2 -->
+                <div class="p-6 bg-mono-900/50 border border-mono-800 rounded-lg hover:border-mono-600 transition-all flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono px-2 py-0.5 bg-mono-800 text-mono-300 border border-mono-700 rounded">2026-2029</span>
+                            <i data-lucide="camera" class="w-5 h-5 text-mono-400"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-mono-100">Gemini certified University Student</h3>
+                        <p class="text-xs font-mono text-mono-500">Penyelenggara: Google</p>
+                        <p class="text-xs text-mono-400 leading-relaxed">
+                        
+                        </p>
+                    </div>
+                    <button onclick="openModal('Best Photography & Lighting Setup', '2025', 'Pameran Seni Visual Mahasiswa', 'Sertifikat apresiasi pameran dan karya rilis karya fotografi terpilih.')" class="w-full py-2 border border-mono-700 text-mono-200 text-xs font-mono rounded hover:bg-mono-100 hover:text-mono-950 transition-all text-center">
+                        Lihat Bukti
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+      
+
+        <!-- ========================================== -->
+        <!-- # [EDIT] BAGIAN 04: CONTACT                -->
+        <!-- ========================================== -->
+        <section id="contact" class="scroll-mt-28 space-y-8 scroll-animate">
+            <div class="border-b border-mono-800 pb-4 flex items-end justify-between">
+                <div>
+                    <span class="text-xs font-mono text-mono-500 uppercase tracking-widest block mb-1">BAGIAN 04</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-mono-50">Contact</h2>
+                </div>
+                <i data-lucide="send" class="text-mono-600 w-6 h-6"></i>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-10">
+                <div class="lg:col-span-2 space-y-6">
+                    <div>
+                        <h3 class="text-xl font-semibold text-mono-100 mb-2">Mari Terhubung</h3>
+                        <p class="text-sm text-mono-400 leading-relaxed">
+                            Tertarik untuk berkolaborasi, diskusi proyek, atau sekadar menyapa? Kontak saya kapan saja.
+                        </p>
+                    </div>
+
+                    <!-- # [EDIT] INFORMASI KONTAK & LINK SOSIAL MEDIA -->
+                    <div class="space-y-3 font-mono text-sm">
+                        
+                        <!-- Email -->
+                        <a href="mailto:mqoval9@gmail.com" class="flex items-center space-x-3 p-3 bg-mono-900/60 border border-mono-800 rounded hover:border-mono-500 hover:text-mono-50 transition-all group">
+                            <i data-lucide="mail" class="w-5 h-5 text-mono-400 group-hover:text-mono-100"></i>
+                            <span class="text-xs text-mono-300">mqoval9@gmail.com</span> <!-- # [EDIT] Email Anda -->
+                        </a>
+
+                        <!-- GitHub -->
+                        <a href="https://github.com/QOVAL09" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-3 p-3 bg-mono-900/60 border border-mono-800 rounded hover:border-mono-500 hover:text-mono-50 transition-all group">
+                            <i data-lucide="github" class="w-5 h-5 text-mono-400 group-hover:text-mono-100"></i>
+                            <span class="text-xs text-mono-300">github.com/QOVAL09</span> <!-- # [EDIT] Link GitHub Anda -->
+                        </a>
+
+                        <!-- LinkedIn -->
+                        <a href="https://www.linkedin.com/in/muhammad-qoval-al-chanafi-7b2196441?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-3 p-3 bg-mono-900/60 border border-mono-800 rounded hover:border-mono-500 hover:text-mono-50 transition-all group">
+                            <i data-lucide="linkedin" class="w-5 h-5 text-mono-400 group-hover:text-mono-100"></i>
+                            <span class="text-xs text-mono-300">linkedin.com/in/muhammad-qoval-al-chanafi</span> <!-- # [EDIT] Link LinkedIn Anda -->
+                        </a>
+                    </div>
+
+                    <!-- # [EDIT] BOX UNDUH RESUME / CV -->
+                    <div class="p-4 border border-mono-800 bg-mono-900/20 rounded space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono text-mono-400">CURRICULUM VITAE</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 bg-mono-800 text-mono-300 rounded">PDF</span>
+                        </div>
+                        <p class="text-xs text-mono-500">Unduh ringkasan CV terbaru saya.</p>
+                        <!-- # [EDIT] LINK DOWNLOAD DIRECT GOOGLE DRIVE CV -->
+                        <a href="https://drive.google.com/file/d/1GjjzOpJMpgUnBoFTPCPbPwwwUfOeJK4V/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="w-full py-2 px-4 bg-mono-100 text-mono-950 font-mono text-xs font-bold rounded hover:bg-mono-300 transition-all flex items-center justify-center space-x-2">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                            <span>Unduh CV / Resume</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- FORMULIR KONTAK -->
+                <div class="lg:col-span-3 p-6 bg-mono-900/50 border border-mono-800 rounded-lg">
+                    <form id="contact-form" class="space-y-4" onsubmit="handleFormSubmit(event)">
+                        <div>
+                            <label for="name" class="block text-xs font-mono text-mono-400 uppercase mb-1">Nama Lengkap</label>
+                            <input type="text" id="name" required placeholder="Masukkan nama Anda" class="w-full bg-mono-950 border border-mono-800 rounded px-4 py-2.5 text-sm text-mono-100 focus:outline-none focus:border-mono-400 transition-colors">
+                        </div>
+
+                        <div>
+                            <label for="email" class="block text-xs font-mono text-mono-400 uppercase mb-1">Email</label>
+                            <input type="email" id="email" required placeholder="nama@email.com" class="w-full bg-mono-950 border border-mono-800 rounded px-4 py-2.5 text-sm text-mono-100 focus:outline-none focus:border-mono-400 transition-colors">
+                        </div>
+
+                        <div>
+                            <label for="message" class="block text-xs font-mono text-mono-400 uppercase mb-1">Pesan</label>
+                            <textarea id="message" rows="4" required placeholder="Tuliskan pesan Anda..." class="w-full bg-mono-950 border border-mono-800 rounded px-4 py-2.5 text-sm text-mono-100 focus:outline-none focus:border-mono-400 transition-colors resize-none"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-3 bg-mono-100 hover:bg-mono-300 text-mono-950 font-mono font-bold text-xs uppercase tracking-wider rounded transition-all flex items-center justify-center space-x-2">
+                            <span>Kirim Pesan</span>
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                        </button>
+                    </form>
+
+                    <div id="form-alert" class="hidden mt-4 p-3 bg-mono-800 border border-mono-700 text-xs font-mono text-mono-200 rounded text-center">
+                        ✓ Pesan telah dikirim.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- # [EDIT] FOOTER                            -->
+    <!-- ========================================== -->
+    <footer class="border-t border-mono-800 bg-mono-950 py-8 mt-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-mono-500">
+            <div>
+                © 2026 Alex Wijaya. Portofolio Monokrom Minimalis. <!-- # [EDIT] Teks Hak Cipta -->
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="#about" class="hover:text-mono-300">Awal</a>
+                <span>•</span>
+                <a href="#skills" class="hover:text-mono-300">Kemampuan</a>
+                <span>•</span>
+                <a href="#achievements" class="hover:text-mono-300">Pencapaian</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========================================== -->
+    <!-- # [EDIT] MODAL PREVIEW DOKUMENTASI         -->
+    <!-- ========================================== -->
+    <div id="modal-backdrop" class="fixed inset-0 bg-mono-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-mono-900 border border-mono-700 max-w-lg w-full rounded-lg shadow-2xl overflow-hidden p-6 space-y-4">
+            <div class="flex justify-between items-start border-b border-mono-800 pb-3">
+                <div>
+                    <span id="modal-year" class="text-[10px] font-mono px-2 py-0.5 bg-mono-800 text-mono-300 rounded">2024</span>
+                    <h3 id="modal-title" class="text-lg font-bold text-mono-50 mt-1">Judul Pencapaian</h3>
+                    <p id="modal-org" class="text-xs font-mono text-mono-400">Penyelenggara / Lembaga</p>
+                </div>
+                <button onclick="closeModal()" class="text-mono-500 hover:text-mono-100 p-1">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="space-y-3">
+                <div class="w-full h-48 bg-mono-950 border border-mono-800 rounded flex flex-col items-center justify-center p-4 text-center">
+                    <i data-lucide="award" class="w-12 h-12 text-mono-600 mb-2"></i>
+                    <span class="text-xs font-mono text-mono-400">DOKUMENTASI BUKTI SERTIFIKAT</span>
+                </div>
+                <p id="modal-desc" class="text-xs text-mono-300 leading-relaxed">
+                    Deskripsi rincian bukti sertifikat.
+                </p>
+            </div>
+
+            <div class="pt-2 flex justify-end">
+                <button onclick="closeModal()" class="px-4 py-2 bg-mono-100 text-mono-950 text-xs font-mono font-bold rounded hover:bg-mono-300 transition-all">
+                    Tutup Preview
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- LOGIKA JAVASCRIPT (INTERAKSI & ANIMASI)    -->
+    <!-- ========================================== -->
+    <script>
+        // Inisialisasi Ikon Lucide
+        lucide.createIcons();
+
+        // ----------------------------------------------------
+        // # [EDIT] 1. LOGIKA HEADER HILANG/MUNCUL SAAT SCROLL
+        // ----------------------------------------------------
+        let lastScrollY = window.scrollY;
+        const mainHeader = document.getElementById('main-header');
+
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+
+            // Jika di posisi paling atas layar, header selalu muncul
+            if (currentScrollY <= 10) {
+                mainHeader.classList.remove('nav-hidden');
+                lastScrollY = currentScrollY;
+                return;
+            }
+
+            // Scroll ke bawah -> Tambahkan kelas .nav-hidden (Header tersembunyi)
+            if (currentScrollY > lastScrollY) {
+                mainHeader.classList.add('nav-hidden');
+            } 
+            // Scroll ke atas -> Hapus kelas .nav-hidden (Header muncul kembali)
+            else {
+                mainHeader.classList.remove('nav-hidden');
+            }
+
+            lastScrollY = currentScrollY;
+        });
+
+        // ----------------------------------------------------
+        // # [EDIT] 2. LOGIKA ANIMASI HILANG/MUNCUL DENGAN SCROLL
+        // ----------------------------------------------------
+        const scrollAnimateElements = document.querySelectorAll('.scroll-animate');
+
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Masuk area layar -> Muncul (fade-in & slide-up)
+                    entry.target.classList.add('is-visible');
+                } else {
+                    // Keluar area layar -> Hilang (fade-out)
+                    entry.target.classList.remove('is-visible');
+                }
+            });
+        }, {
+            threshold: 0.15, // # [EDIT] Persentase elemen terlihat sebelum memicu animasi (0.15 = 15%)
+            rootMargin: "0px 0px -50px 0px"
+        });
+
+        scrollAnimateElements.forEach(el => scrollObserver.observe(el));
+
+        // ----------------------------------------------------
+        // # [EDIT] 3. LOGIKA MENU MOBILE TOGGLE
+        // ----------------------------------------------------
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // ----------------------------------------------------
+        // # [EDIT] 4. LOGIKA FILTER KATEGORI SKILL
+        // ----------------------------------------------------
+        const filterBtns = document.querySelectorAll('.skill-btn');
+        const skillCards = document.querySelectorAll('.skill-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-mono-100', 'text-mono-950');
+                    b.classList.add('border-mono-800', 'text-mono-400');
+                });
+
+                btn.classList.add('bg-mono-100', 'text-mono-950');
+                btn.classList.remove('border-mono-800', 'text-mono-400');
+
+                const filterValue = btn.getAttribute('data-filter');
+
+                skillCards.forEach(card => {
+                    if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // ----------------------------------------------------
+        // # [EDIT] 5. LOGIKA POPUP MODAL PREVIEW
+        // ----------------------------------------------------
+        const modalBackdrop = document.getElementById('modal-backdrop');
+        const modalTitle = document.getElementById('modal-title');
+        const modalYear = document.getElementById('modal-year');
+        const modalOrg = document.getElementById('modal-org');
+        const modalDesc = document.getElementById('modal-desc');
+
+        function openModal(title, year, org, desc) {
+            modalTitle.innerText = title;
+            modalYear.innerText = year;
+            modalOrg.innerText = org;
+            modalDesc.innerText = desc;
+            modalBackdrop.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            modalBackdrop.classList.add('hidden');
+        }
+
+        modalBackdrop.addEventListener('click', (e) => {
+            if (e.target === modalBackdrop) closeModal();
+        });
+
+        // ----------------------------------------------------
+        // # [EDIT] 6. LOGIKA SUBMIT FORM & SIMULASI DOWNLOAD CV
+        // ----------------------------------------------------
+        // # [EDIT] 6. LOGIKA SUBMIT FORM
+        // ----------------------------------------------------
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const alertBox = document.getElementById('form-alert');
+            alertBox.classList.remove('hidden');
+            document.getElementById('contact-form').reset();
+            setTimeout(() => alertBox.classList.add('hidden'), 4000);
+        }
+    </script>
+</body>
+</html>

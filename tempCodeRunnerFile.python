@@ -1,0 +1,61 @@
+"""
+nama=("ahmad","berry","caca")
+nama_yang_dicari=input("masukkan nama: ")
+ada=False
+for n in nama:
+    if n == nama_yang_dicari:
+         ada= True
+         break
+if ada:
+    print(nama_yang_dicari,'ada dalam daftar')
+else:
+    print(nama_yang_dicari,'tidak ada dalam daftar')
+"""
+'''
+#membuat list 
+buah= ["apel","jeruk","mangga"]
+#positif indexing
+print(buah[1])
+#negatif indexing
+print(buah[-3])
+'''
+'''
+angka=[10,20,30,40,50]
+print(angka[1:4])
+print(angka[::2])
+'''
+'''
+#menambahkan elemen di paling akhir
+buah=["apel","jeruk"]
+buah.append("manggis,mangga,alpukat")
+print(buah)
+'''
+'''
+nilai=[70,80,100]
+#sisipkan angka 90 pada indeks ke 2
+nilai.insert(2,90)
+print(nilai)
+#sisipkan di posisi awal(indeks 0)
+nilai.pop(0)
+print(nilai)
+'''
+'''
+mahasiswa='budi',20,'siste informasi'
+print(mahasiswa)
+nama,umur,jurusan=mahasiswa
+print(nama,umur,jurusan)
+'''
+#membuat list dan tuple
+import sys
+
+data_list=[10,20,30]
+data_tuple=(10,20,30)
+#menampilkan alamat memori objek
+print("alamat memori list:",id(data_list))
+print("alamat memori tuple:",id(data_tuple))
+# menampilkan alamat memori tiap elemen di dalam list/tuple
+print("\nAlamat memori elemen ke-0 pada list:",id(data_list[0]))
+print("\nAlamat memori elemen ke-0 pada tuple:",id(data_tuple[0]))
+
+print("ukuran memori list:",sys.getsizeof(data_list),"byte")
+print("ukuran memori tuple:",sys.getsizeof(data_tuple),"byte")
